@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="HieuPaylandFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="formBlockType" xsi:type="string">Magento\AuthorizenetAcceptjs\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">AuthorizenetAcceptjsInfoBlock</argument>
+            <argument name="valueHandlerPool" xsi:type="object">AuthorizenetAcceptjsValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">AuthorizenetAcceptjsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">AuthorizenetAcceptjsCommandPool</argument>
+        </arguments>
+    </virtualType>
+</config>
