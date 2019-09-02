@@ -21,15 +21,15 @@ class PaymentAction implements \Magento\Framework\Data\OptionSourceInterface
         return [
             [
                 'value' => 'authorize',
-                'label' => __('Authorize'),
+                'label' => __('AUTHORIZATION'),
             ],
             [
                 'value' => 'deferred',
-                'label' => __('Deferred')
+                'label' => __('DEFERRED')
             ],
             [
                 'value' => 'payout',
-                'label' => __('Payout')
+                'label' => __('PAYOUT')
             ]
         ];
     }

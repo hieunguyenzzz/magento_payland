@@ -10,17 +10,14 @@
         <section id="payment">
             <group id="hieu_payland" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Payments Bakery</label>
-                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Enabled</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <requires>
-                        <group id="hieu_payland_required"/>
-                    </requires>
-                </field>
-                <group id="required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
-                    <label>Payments Bakery</label>
+
                     <attribute type="expanded">1</attribute>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/hieu_payland/active</config_path>
+                    </field>
                     <field id="title" translate="label" type="text" sortOrder="10" showInDefault="10" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Title</label>
                         <config_path>payment/hieu_payland/title</config_path>
@@ -50,7 +47,17 @@
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/hieu_payland/payment_service</config_path>
                     </field>
-                </group>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/hieu_payland/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <config_path>payment/hieu_payland/specificcountry</config_path>
+                    </field>
+
             </group>
         </section>
     </system>

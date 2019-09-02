@@ -1,8 +1,4 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
 
 declare(strict_types=1);
 
@@ -10,6 +6,9 @@ namespace Hieu\Payland\Gateway;
 
 use Hieu\Payland\Model\Adminhtml\Source\Environment;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Houses configuration for this gateway
@@ -17,36 +16,98 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
     const METHOD = 'hieu_payland';
-    private const KEY_ENVIRONMENT = 'environment';
-    private const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
-    private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
+    const URL_POST = 'paylands/order/pay';
+    const URL_OK = 'checkout/onepage/success/';
+    /**
+     * @todo this should be configurable so it also works with other checkout module i.e onestepcheckout
+     */
+    const URL_KO = 'checkout/index/index';
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    private $paymentActionMap = ['authorize' => 'AUTHORIZATION'];
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
      * @param null|string $methodCode
      * @param string $pathPattern
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        $methodCode = null,
+        StoreManagerInterface $storeManager,
+        $methodCode = self::METHOD,
         $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
+        $this->storeManager = $storeManager;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPaymentAction() {
+        return $this->paymentActionMap[$this->getValue('payment_action')];
+    }
 
     /**
-     * Gets the API endpoint URL
+     * @return mixed
+     */
+    public function getSignature() {
+        return $this->getValue('signature');
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function getUrlPost() {
+        return $this->storeManager->getStore()->getBaseUrl() . self::URL_POST;
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function getUrlOk() {
+        return $this->storeManager->getStore()->getBaseUrl() . self::URL_OK;
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function getUrlKo() {
+        return $this->storeManager->getStore()->getBaseUrl() . self::URL_KO;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApiKey() {
+        return $this->getValue('api_key');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentService() {
+        return $this->getValue('payment_service');
+    }
+
+    /**
+     *  @todo implement sandbox url / production url depend on configuration
      *
-     * @param int|null $storeId
      * @return string
      */
-    public function getApiUrl($storeId = null): string
-    {
-        $environment = $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
+    public function getAuthorizeApiEndpoint() {
+        return 'https://api.paylands.com/v1/sandbox/payment';
+    }
 
-        return $environment === Environment::ENVIRONMENT_SANDBOX
-            ? self::ENDPOINT_URL_SANDBOX
-            : self::ENDPOINT_URL_PRODUCTION;
+    /**
+     * @return string
+     */
+    public function getRedirectApiEndpoint() {
+        return 'https://api.paylands.com/v1/sandbox/payment/process/';
     }
 }

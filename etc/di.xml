@@ -2,11 +2,116 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <virtualType name="HieuPaylandFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="formBlockType" xsi:type="string">Magento\AuthorizenetAcceptjs\Block\Form</argument>
-            <argument name="infoBlockType" xsi:type="string">AuthorizenetAcceptjsInfoBlock</argument>
-            <argument name="valueHandlerPool" xsi:type="object">AuthorizenetAcceptjsValueHandlerPool</argument>
-            <argument name="validatorPool" xsi:type="object">AuthorizenetAcceptjsValidatorPool</argument>
-            <argument name="commandPool" xsi:type="object">AuthorizenetAcceptjsCommandPool</argument>
+            <argument name="code" xsi:type="const">Hieu\Payland\Gateway\Config::METHOD</argument> <!-- is this needed ? -->
+            <argument name="formBlockType" xsi:type="string">Hieu\Payland\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">HieuPaylandInfoBlock</argument>
+            <argument name="valueHandlerPool" xsi:type="object">HieuPaylandValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">HieuPaylandValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">HieuPaylandCommandPool</argument>
         </arguments>
     </virtualType>
+
+    <virtualType name="HieuPaylandInfoBlock" type="Hieu\Payland\Block\Info">
+        <arguments>
+            <argument name="config" xsi:type="object">Hieu\Payland\Gateway\Config</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="HieuPaylandValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">HieuPaylandDefaultValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="HieuPaylandDefaultValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">Hieu\Payland\Gateway\Config</argument>
+        </arguments>
+    </virtualType>
+
+
+    <virtualType name="HieuPaylandValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="country" xsi:type="string">HieuPaylandCountryValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="HieuPaylandCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">Hieu\Payland\Gateway\Config</argument>
+        </arguments>
+    </virtualType>
+
+<!--    Start Command-->
+    <virtualType name="HieuPaylandCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">HieuPaylandAuthorizeCommand</item>
+                <item name="refund" xsi:type="string">HieuPaylandRefundCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Authorize Command. this send post request to https://api.paylands.com/v1/sandbox/payment and get the token back
+    once the token is retrieved, redirect user to https://api.paylands.com/v1/sandbox/payment/process/token
+    -->
+    <virtualType name="HieuPaylandAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">HieuPaylandAuthorizeRequest</argument>
+            <argument name="transferFactory" xsi:type="object">Hieu\Payland\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Hieu\Payland\Gateway\Http\Client\Authorize</argument>
+            <argument name="handler" xsi:type="object">HieuPaylandAuthorizationHandler</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="HieuPaylandAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="amount" xsi:type="string">Hieu\Payland\Gateway\Request\AmountDataBuilder</item>
+                <item name="operative" xsi:type="string">Hieu\Payland\Gateway\Request\OperativeDataBuilder</item>
+                <item name="signature" xsi:type="string">Hieu\Payland\Gateway\Request\SignatureDataBuilder</item>
+                <item name="customer_ext_id" xsi:type="string">Hieu\Payland\Gateway\Request\CustomerExtId</item>
+                <item name="url_post" xsi:type="string">Hieu\Payland\Gateway\Request\UrlPostDataBuilder</item>
+                <item name="service" xsi:type="string">Hieu\Payland\Gateway\Request\ServiceDataBuilder</item>
+                <item name="url_ok" xsi:type="string">Hieu\Payland\Gateway\Request\UrlOkDataBuilder</item>
+                <item name="url_ko" xsi:type="string">Hieu\Payland\Gateway\Request\UrlOkDataBuilder</item>
+                <item name="description" xsi:type="string">Hieu\Payland\Gateway\Request\DescriptionDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="HieuPaylandAuthorizationHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="token" xsi:type="string">Hieu\Payland\Gateway\Response\TokenHandler</item>
+                <item name="uuid" xsi:type="string">Hieu\Payland\Gateway\Response\OrderUUID</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Refund Command -->
+    <virtualType name="HieuPaylandRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">HieuPaylandRefundRequest</argument>
+            <argument name="transferFactory" xsi:type="object">Hieu\Payland\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Hieu\Payland\Gateway\Http\Client\Refund</argument>
+            <argument name="handler" xsi:type="object">HieuPaylandAuthorizationHandler</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="HieuPaylandRefundRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="amount" xsi:type="string">Hieu\Payland\Gateway\Request\AmountDataBuilder</item>
+                <item name="order_uuid" xsi:type="string">Hieu\Payland\Gateway\Request\OrderUUID</item>
+                <item name="signature" xsi:type="string">Hieu\Payland\Gateway\Request\SignatureDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <preference for="Hieu\Payland\Api\PaylandTokenResolverInterface" type="Hieu\Payland\Model\PaylandTokenResolver" />
 </config>
