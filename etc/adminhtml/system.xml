@@ -38,12 +38,12 @@
                         <config_path>payment/hieu_payland/api_key</config_path>
                     </field>
                     <field id="signature" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Transaction Key</label>
+                        <label>Signature Key</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/hieu_payland/signature</config_path>
                     </field>
                     <field id="payment_service" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Signature Key</label>
+                        <label>Payment Service</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/hieu_payland/payment_service</config_path>
                     </field>

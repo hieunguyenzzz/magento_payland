@@ -82,6 +82,8 @@ abstract class Client implements ClientInterface
             throw new ClientException(
                 __('Something went wrong in the payment payland.')
             );
+        } finally {
+            $this->logger->debug($log);
         }
     }
 
