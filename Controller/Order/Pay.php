@@ -1,7 +1,7 @@
 <?php
 
 namespace Hieu\Payland\Controller\Order;
-class Pay extends \Magento\Framework\App\Action\Action
+class Pay extends \Magento\Framework\App\Action\Action implements \Magento\Framework\App\Action\HttpPostActionInterface
 {
     public function execute()
     {
