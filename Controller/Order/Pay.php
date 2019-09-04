@@ -5,8 +5,11 @@ class Pay extends \Magento\Framework\App\Action\Action implements \Magento\Frame
 {
     public function execute()
     {
-        $params = $this->getRequest()->getParams();
-        file_put_contents(BP . '/var/log/paylands.log', print_r($params, true), FILE_APPEND);
+        $json = file_get_contents('php://input');
+
+// Converts it into a PHP object
+        $data = json_decode($json);
+        file_put_contents(BP . '/var/log/paylands.log', print_r($data, true), FILE_APPEND);
 
         /**
          * @todo update order status here
