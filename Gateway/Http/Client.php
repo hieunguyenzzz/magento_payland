@@ -81,7 +81,7 @@ abstract class Client implements ClientInterface
             }
             return $data;
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            Logger::error($e->getMessage());
 
             throw new ClientException(
                 __('Something went wrong in the payment payland.')
