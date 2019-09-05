@@ -102,9 +102,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getAuthorizeApiEndpoint() {
         if ($this->getValue('environment') == \Hieu\Payland\Model\Adminhtml\Source\Environment::ENVIRONMENT_SANDBOX) {
-            return 'https://api.paylands.com/v1/sandbox/payment/';
+            return 'https://api.paylands.com/v1/sandbox/payment';
         }
-        return  'https://api.paylands.com/v1/payment/';
+        return  'https://api.paylands.com/v1/payment';
     }
 
     /**
