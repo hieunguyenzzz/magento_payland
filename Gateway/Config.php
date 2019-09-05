@@ -101,13 +101,19 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @return string
      */
     public function getAuthorizeApiEndpoint() {
-        return 'https://api.paylands.com/v1/sandbox/payment';
+        if ($this->getValue('sandbox')) {
+            return 'https://api.paylands.com/v1/sandbox/payment';
+        }
+        return  'https://api.paylands.com/v1/payment';
     }
 
     /**
      * @return string
      */
     public function getRedirectApiEndpoint() {
-        return 'https://api.paylands.com/v1/sandbox/payment/process/';
+        if ($this->getValue('sandbox')) {
+            return 'https://api.paylands.com/v1/sandbox/payment';
+        }
+        return 'https://api.paylands.com/v1/payment/process/';
     }
 }
