@@ -2,6 +2,7 @@
 
 namespace Hieu\Payland\Gateway\Http;
 
+use Hieu\Payland\Model\Logger;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -60,6 +61,8 @@ abstract class Client implements ClientInterface
         ];
         $client = $this->httpClientFactory->create();
         $url = $this->getApiUrl();
+        Logger::debug('-----authorize request-----');
+        Logger::debug($url);
         try {
             $client->setUri($url);
             $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
@@ -84,7 +87,7 @@ abstract class Client implements ClientInterface
                 __('Something went wrong in the payment payland.')
             );
         } finally {
-            $this->logger->debug(print_r($log, true));
+            Logger::debug($log);
         }
     }
 

@@ -96,7 +96,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *  @todo implement sandbox url / production url depend on configuration
+     *
      *
      * @return string
      */
