@@ -9,11 +9,4 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-
-    <route url="/V1/processorder" method="POST">
-        <service class="Hieu\Payland\Api\PaylandOrderProcesserInterface" method="process"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
 </routes>
