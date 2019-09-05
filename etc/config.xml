@@ -12,7 +12,6 @@
                 <active>0</active>
                 <cctypes>AE,VI,MC,DI,JCB,DN</cctypes>
                 <debug>0</debug>
-                <sandbox>1</sandbox>
                 <can_use_checkout>1</can_use_checkout>
                 <can_use_internal>1</can_use_internal>
                 <can_capture_partial>0</can_capture_partial>
@@ -38,7 +37,7 @@
                 <payment_service backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <allowspecific>0</allowspecific>
                 <currency>USD</currency>
-                <environment>production</environment>
+                <environment>sandbox</environment>
             </hieu_payland>
         </payment>
     </default>
