@@ -1,24 +1,76 @@
 <?php
 
 namespace Hieu\Payland\Controller\Order;
+use Hieu\Payland\Model\Logger;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\Service\InvoiceService;
 
 class Pay extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
+    /**
+     * @var InvoiceService
+     */
+    private $invoiceService;
+    /**
+     * @var OrderFactory
+     */
+    private $orderFactory;
+
+    public function __construct(
+        Context $context, InvoiceService $invoiceService,
+        OrderFactory $orderFactory
+    ){
+        parent::__construct($context);
+        $this->invoiceService = $invoiceService;
+        $this->orderFactory = $orderFactory;
+    }
+
     public function execute()
     {
+        $responseData = $this->_getReponseOrderData();
+        Logger::debug($responseData);
+        $order = $this->orderFactory->create()->load($responseData['order_uuid'], 'payland_order_uuid');
+        try {
+            $invoice = $this->invoiceService->prepareInvoice($order, []);
+            $invoice->setRequestedCaptureCase('online');
+            $invoice->register();
+            $invoice->getOrder()->setIsInProcess(true);
+            $transactionSave = $this->_objectManager->create(
+                \Magento\Framework\DB\Transaction::class
+            )->addObject(
+                $invoice
+            )->addObject(
+                $invoice->getOrder()
+            );
+            $transactionSave->save();
+        } catch (LocalizedException $e) {
+            Logger::error($e->getMessage());
+        }
+
+    }
+
+    protected function _getReponseOrderData() {
         $json = file_get_contents('php://input');
-
-// Converts it into a PHP object
+        Logger::debug('-----response data in json------');
+        Logger::debug($json);
         $data = json_decode($json);
-        file_put_contents(BP . '/var/log/paylands.log', print_r($data, true), FILE_APPEND);
+        $order = $data->order;
+        $result = [];
+        $transactions = $order->transactions;
+        $transaction = array_pop($transactions);
+        if ($order->transactions) {
+            $result['txt_id'] = $transaction->uuid;
+        }
+        $result['order_uuid'] = $order->uuid;
+        $result['order_status'] = $order->status;
 
-        /**
-         * @todo update order status here
-         */
+        return $result;
     }
 
     /**
