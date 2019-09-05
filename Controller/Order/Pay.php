@@ -33,10 +33,10 @@ class Pay extends \Magento\Framework\App\Action\Action implements HttpPostAction
 
     public function execute()
     {
-        $responseData = $this->_getReponseOrderData();
-        Logger::debug($responseData);
-        $order = $this->orderFactory->create()->load($responseData['order_uuid'], 'payland_order_uuid');
         try {
+            $responseData = $this->_getReponseOrderData();
+            Logger::debug($responseData);
+            $order = $this->orderFactory->create()->load($responseData['order_uuid'], 'payland_order_uuid');
             if (!$order->getId()) {
                 throw new LocalizedException(__('Order is not found'));
             }
@@ -60,12 +60,15 @@ class Pay extends \Magento\Framework\App\Action\Action implements HttpPostAction
 
     /**
      * @return array
+     * @throws LocalizedException
      */
     protected function _getReponseOrderData() {
-        $json = file_get_contents('php://input');
+        $data = file_get_contents('php://input');
         Logger::debug('-----response data in json------');
-        Logger::debug($json);
-        $data = json_decode($json);
+        Logger::debug($data);
+        if (!isset($data->order)) {
+            throw new LocalizedException(_('Missing order data from payland response'));
+        }
         $order = $data->order;
         $result = [];
         $transactions = $order->transactions;
