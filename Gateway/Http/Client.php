@@ -63,6 +63,7 @@ abstract class Client implements ClientInterface
         $url = $this->getApiUrl();
         Logger::debug('-----authorize request-----');
         Logger::debug($url);
+        Logger::debug('username: ' . $transferObject->getAuthUsername());
         try {
             $client->setUri($url);
             $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
