@@ -64,20 +64,23 @@ class Pay extends \Magento\Framework\App\Action\Action implements HttpPostAction
      */
     protected function _getReponseOrderData() {
         $data = file_get_contents('php://input');
-        Logger::debug('-----response data in json------');
+        Logger::debug('-----response data------');
+        $data = json_decode($data, true);
         Logger::debug($data);
-        if (!isset($data->order)) {
-            throw new LocalizedException(_('Missing order data from payland response'));
+        if (!isset($data['order'])) {
+            throw new LocalizedException(__('Missing order data from payland response'));
         }
-        $order = $data->order;
+        $order = $data['order'];
         $result = [];
-        $transactions = $order->transactions;
-        $transaction = array_pop($transactions);
-        if ($order->transactions) {
-            $result['txt_id'] = $transaction->uuid;
+
+        if ($order['transactions']) {
+            $transactions = $order['transactions'];
+            $transaction = array_pop($transactions);
+            $result['txt_id'] = $transaction['uuid'];
         }
-        $result['order_uuid'] = $order->uuid;
-        $result['order_status'] = $order->status;
+        $result['order_uuid'] = $order['uuid'];
+        $result['paid'] = $order['paid'];
+        $result['order_status'] = $order['status'];
 
         return $result;
     }

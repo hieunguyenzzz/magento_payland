@@ -27,11 +27,11 @@
                         <source_model>Hieu\Payland\Model\Adminhtml\Source\Environment</source_model>
                         <config_path>payment/hieu_payland/environment</config_path>
                     </field>
-                    <field id="payment_action" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Payment Action</label>
-                        <source_model>Hieu\Payland\Model\Adminhtml\Source\PaymentAction</source_model>
-                        <config_path>payment/hieu_payland/payment_action</config_path>
-                    </field>
+<!--                    <field id="payment_action" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">-->
+<!--                        <label>Payment Action</label>-->
+<!--                        <source_model>Hieu\Payland\Model\Adminhtml\Source\PaymentAction</source_model>-->
+<!--                        <config_path>payment/hieu_payland/payment_action</config_path>-->
+<!--                    </field>-->
                     <field id="api_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>API Key</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
