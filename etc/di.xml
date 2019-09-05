@@ -51,6 +51,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="authorize" xsi:type="string">HieuPaylandAuthorizeCommand</item>
+                <item name="capture" xsi:type="string">Hieu\Payland\Gateway\Command\CaptureStrategyCommand</item>
                 <item name="refund" xsi:type="string">HieuPaylandRefundCommand</item>
             </argument>
         </arguments>
@@ -110,6 +111,12 @@
                 <item name="order_uuid" xsi:type="string">Hieu\Payland\Gateway\Request\OrderUUID</item>
                 <item name="signature" xsi:type="string">Hieu\Payland\Gateway\Request\SignatureDataBuilder</item>
             </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="AmazonCaptureStrategyCommand" type="Hieu\Payland\Gateway\Command\CaptureStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">HieuPaylandCommandPool</argument>
         </arguments>
     </virtualType>
 

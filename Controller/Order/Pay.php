@@ -37,6 +37,9 @@ class Pay extends \Magento\Framework\App\Action\Action implements HttpPostAction
         Logger::debug($responseData);
         $order = $this->orderFactory->create()->load($responseData['order_uuid'], 'payland_order_uuid');
         try {
+            if (!$order->getId()) {
+                throw new LocalizedException(__('Order is not found'));
+            }
             $invoice = $this->invoiceService->prepareInvoice($order, []);
             $invoice->setRequestedCaptureCase('online');
             $invoice->register();
@@ -55,6 +58,9 @@ class Pay extends \Magento\Framework\App\Action\Action implements HttpPostAction
 
     }
 
+    /**
+     * @return array
+     */
     protected function _getReponseOrderData() {
         $json = file_get_contents('php://input');
         Logger::debug('-----response data in json------');

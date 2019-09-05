@@ -69,6 +69,7 @@ abstract class Client implements ClientInterface
 
             $responseBody = $client->request()
                 ->getBody();
+
             $log['response'] = $responseBody;
             try {
                 $data = $this->json->unserialize($responseBody);
@@ -77,15 +78,16 @@ abstract class Client implements ClientInterface
             }
             return $data;
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->logger->critical($e->getMessage());
 
             throw new ClientException(
                 __('Something went wrong in the payment payland.')
             );
         } finally {
-            $this->logger->debug($log);
+            $this->logger->debug(print_r($log, true));
         }
     }
+
 
     abstract function getApiUrl();
 }
