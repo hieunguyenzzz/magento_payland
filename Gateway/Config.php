@@ -112,7 +112,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getRedirectApiEndpoint() {
         if ($this->getValue('environment') == \Hieu\Payland\Model\Adminhtml\Source\Environment::ENVIRONMENT_SANDBOX) {
-            return 'https://api.paylands.com/v1/sandbox/process/';
+            return 'https://api.paylands.com/v1/sandbox/payment/process/';
         }
         return 'https://api.paylands.com/v1/payment/process/';
     }
