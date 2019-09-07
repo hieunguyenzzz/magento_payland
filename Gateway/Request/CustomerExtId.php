@@ -49,7 +49,7 @@ class CustomerExtId implements BuilderInterface {
             /**
              * @todo handle guest customer
              */
-            die('no customer found');
+            return [ 'customer_ext_id' => 'guest' . rand(0,999999)];
         }
         $customer = $this->customerRepository->getById($customerId);
         return [ 'customer_ext_id' => 'user' . $customer->getId()];
