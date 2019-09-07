@@ -28,6 +28,6 @@ class DescriptionDataBuilder implements BuilderInterface {
      */
     public function build(array $buildSubject)
     {
-        return [ 'description' => 'not sure what to put here'];
+        return [ 'description' => 'Purchasing from Magento'];
     }
 }
