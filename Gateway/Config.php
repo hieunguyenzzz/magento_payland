@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Hieu\Payland\Gateway;
 
 use Hieu\Payland\Model\Adminhtml\Source\Environment;

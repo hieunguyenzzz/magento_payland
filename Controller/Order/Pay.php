@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\Service\InvoiceService;
 
-class Pay extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface, CsrfAwareActionInterface
+class Pay extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var InvoiceService
@@ -85,29 +85,4 @@ class Pay extends \Magento\Framework\App\Action\Action implements HttpPostAction
         return $result;
     }
 
-    /**
-     * Create exception in case CSRF validation failed.
-     * Return null if default exception will suffice.
-     *
-     * @param RequestInterface $request
-     *
-     * @return InvalidRequestException|null
-     */
-    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
-    {
-        return null;
-    }
-
-    /**
-     * Perform custom request validation.
-     * Return null if default validation is needed.
-     *
-     * @param RequestInterface $request
-     *
-     * @return bool|null
-     */
-    public function validateForCsrf(RequestInterface $request): ?bool
-    {
-        return true;
-    }
 }

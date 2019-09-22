@@ -1,11 +1,4 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-declare(strict_types=1);
-
 namespace Hieu\Payland\Model\Adminhtml\Source;
 
 /**
@@ -21,7 +14,7 @@ class Environment implements \Magento\Framework\Data\OptionSourceInterface
      *
      * @return array
      */
-    public function toOptionArray(): array
+    public function toOptionArray()
     {
         return [
             [

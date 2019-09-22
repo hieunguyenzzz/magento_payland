@@ -1,11 +1,4 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-declare(strict_types=1);
-
 namespace Hieu\Payland\Model\Adminhtml\Source;
 
 /**
@@ -16,7 +9,7 @@ class PaymentAction implements \Magento\Framework\Data\OptionSourceInterface
     /**
      * @inheritdoc
      */
-    public function toOptionArray(): array
+    public function toOptionArray()
     {
         return [
             [

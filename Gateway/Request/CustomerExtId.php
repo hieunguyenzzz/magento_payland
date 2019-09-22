@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 namespace Hieu\Payland\Gateway\Request;
 
 use Hieu\Payland\Gateway\Config;

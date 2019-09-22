@@ -1,8 +1,6 @@
 <?php
 
 namespace Hieu\Payland\Model;
-
-
 use Hieu\Payland\Gateway\Config;
 use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
 use Magento\Framework\Api\SortOrder;
